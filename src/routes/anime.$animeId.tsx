@@ -98,6 +98,9 @@ function AnimeDetailPage() {
   const [subscriptionBusy, setSubscriptionBusy] = useState(false);
   const [screenshots, setScreenshots] = useState<ShikimoriScreenshot[]>([]);
   const [activeScreenshotIndex, setActiveScreenshotIndex] = useState<number | null>(null);
+  const displayableScreenshots = screenshots
+    .map(toSameOriginShikimoriScreenshot)
+    .filter((screenshot): screenshot is ShikimoriScreenshot => screenshot !== null);
   const screenshotTriggerRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
