@@ -33,7 +33,7 @@ describe("Worker security headers", () => {
     expect(policy).toContain("https://telegram.org");
     expect(policy).toContain("https://fonts.googleapis.com");
     expect(policy).toContain("https://www.youtube-nocookie.com");
-    expect(policy).toContain("https://kodik.info");
+    expect(policy).not.toContain("https://kodik.info");
     expect(policy).toContain("script-src 'self' 'unsafe-inline'");
     expect(response.headers.get("Content-Security-Policy")).toContain("default-src 'self'");
   });
