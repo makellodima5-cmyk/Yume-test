@@ -471,10 +471,10 @@ function AnimeDetailPage() {
                   </div>
                 )}
 
-                {(anime.studios?.length || anime.episodesAired > 0) && (
+                {(anime.studios?.length || (anime.episodesAired ?? 0) > 0) && (
                   <div className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
                     {anime.studios?.length ? <span>{language === "en" ? "Studio" : "Студия"}: {anime.studios.join(", ")}</span> : null}
-                    {anime.episodesAired > 0 ? <span>{language === "en" ? "Episodes aired" : "Серии"}: {anime.episodesAired}{anime.episodes > 0 ? (language === "en" ? " of " : " из ") + anime.episodes : ""}</span> : null}
+                    {(anime.episodesAired ?? 0) > 0 ? <span>{language === "en" ? "Episodes aired" : "Серии"}: {anime.episodesAired ?? 0}{anime.episodes > 0 ? (language === "en" ? " of " : " из ") + anime.episodes : ""}</span> : null}
                   </div>
                 )}
                 <div className="mt-5 max-w-3xl">
@@ -539,10 +539,10 @@ function AnimeDetailPage() {
                     {anime.kind && <span className="rounded-full border border-border px-2 py-1 text-[11px] text-muted-foreground">{anime.kind}</span>}
                     {anime.ageRating && <span className="rounded-full border border-border px-2 py-1 text-[11px] text-muted-foreground">{anime.ageRating}</span>}
                   </div>
-                  {(anime.studios?.length || anime.episodesAired > 0) && (
+                  {(anime.studios?.length || (anime.episodesAired ?? 0) > 0) && (
                     <div className="mt-2 space-y-1 text-[11px] leading-relaxed text-muted-foreground">
                       {anime.studios?.length ? <p>{language === "en" ? "Studio" : "Студия"}: {anime.studios.join(", ")}</p> : null}
-                      {anime.episodesAired > 0 ? <p>{language === "en" ? "Episodes aired" : "Серии"}: {anime.episodesAired}{anime.episodes > 0 ? (language === "en" ? " of " : " из ") + anime.episodes : ""}</p> : null}
+                      {(anime.episodesAired ?? 0) > 0 ? <p>{language === "en" ? "Episodes aired" : "Серии"}: {anime.episodesAired ?? 0}{anime.episodes > 0 ? (language === "en" ? " of " : " из ") + anime.episodes : ""}</p> : null}
                     </div>
                   )}
                   {(formatAnimeDate(anime.airedOn, language) || formatAnimeDate(anime.nextEpisodeAt, language, true)) && (
