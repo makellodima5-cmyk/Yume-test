@@ -1,0 +1,437 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --font-display: "Unbounded", system-ui, sans-serif;
+  --font-sans: "Manrope", system-ui, sans-serif;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-magenta: var(--magenta);
+  --color-gold: var(--gold);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+:root {
+  color-scheme: dark;
+  --radius: 1rem;
+  --background: oklch(0.13 0.03 285);
+  --foreground: oklch(0.96 0.01 300);
+  --card: oklch(0.18 0.04 285);
+  --card-foreground: oklch(0.96 0.01 300);
+  --popover: oklch(0.17 0.04 285);
+  --popover-foreground: oklch(0.96 0.01 300);
+  --primary: oklch(0.65 0.24 300);
+  --primary-foreground: oklch(0.16 0.04 285);
+  --secondary: oklch(0.24 0.05 285);
+  --secondary-foreground: oklch(0.94 0.01 300);
+  --muted: oklch(0.22 0.04 285);
+  --muted-foreground: oklch(0.7 0.04 290);
+  --accent: oklch(0.28 0.08 300);
+  --accent-foreground: oklch(0.98 0 0);
+  --magenta: oklch(0.68 0.27 345);
+  --gold: oklch(0.84 0.15 85);
+  --destructive: oklch(0.65 0.22 25);
+  --border: oklch(1 0 0 / 9%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.65 0.24 300);
+  --gradient-neon: linear-gradient(120deg, var(--primary), var(--magenta));
+  --gradient-fade: linear-gradient(to top, var(--background) 0%, color-mix(in oklab, var(--background) 70%, transparent) 40%, transparent 100%);
+  --shadow-neon: 0 10px 40px -10px color-mix(in oklab, var(--magenta) 60%, transparent);
+  --body-gradient: radial-gradient(ellipse 82% 34% at 50% 0%, rgba(139, 75, 184, 0.44) 0%, rgba(91, 47, 139, 0.25) 42%, transparent 78%), radial-gradient(ellipse 48% 34% at 100% 17%, rgba(213, 77, 158, 0.27) 0%, transparent 74%), radial-gradient(ellipse 58% 36% at 0% 43%, rgba(112, 61, 171, 0.31) 0%, transparent 76%), radial-gradient(ellipse 66% 36% at 100% 76%, rgba(161, 60, 139, 0.21) 0%, transparent 78%), radial-gradient(ellipse 72% 30% at 28% 100%, rgba(95, 56, 153, 0.21) 0%, transparent 78%), linear-gradient(180deg, #1b1233 0%, #15102b 30%, #110c25 66%, #0c081b 100%);
+}
+
+@layer base {
+  * { border-color: var(--color-border); }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    background-image: var(--body-gradient);
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-attachment: fixed;
+  }
+  h1, h2, h3 { font-family: var(--font-display); }
+}
+
+@utility bg-neon { background-image: var(--gradient-neon); }
+@utility text-neon {
+  background-image: var(--gradient-neon);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@utility shadow-neon { box-shadow: var(--shadow-neon); }
+@utility bg-fade-up { background-image: var(--gradient-fade); }
+@utility glass {
+  background: color-mix(in oklab, var(--background) 70%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+@utility glass-fixed-header {
+  position: fixed !important;
+}
+@utility glass-liquid {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.055) 26%, rgba(190,80,255,0.13) 55%, rgba(255,70,190,0.09) 100%),
+    color-mix(in oklab, #170d2b 54%, transparent);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255,255,255,0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.34),
+    inset 0 -1px 0 rgba(221,150,255,0.13),
+    0 12px 40px rgba(0,0,0,0.35),
+    0 0 32px rgba(179,70,255,0.12);
+  position: relative;
+}
+@utility glass-active {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.32), rgba(212,105,255,0.24) 42%, rgba(255,73,196,0.18));
+  border: 1px solid rgba(255,255,255,0.38);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.45),
+    0 0 18px rgba(199,82,255,0.35),
+    0 0 34px rgba(255,67,200,0.16);
+  backdrop-filter: blur(18px) saturate(200%);
+}
+@utility glass-search {
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.15), rgba(204,100,255,0.12) 48%, rgba(255,75,192,0.10)),
+    rgba(16,8,31,0.40);
+  border: 1px solid rgba(255,255,255,0.24);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.26), 0 4px 22px rgba(192,77,255,0.16);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  backdrop-filter: blur(24px) saturate(190%);
+}
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+/* Keep homepage sections transparent so the shared YUME color atmosphere is visible behind them. */
+.home-content-world {
+  position: relative;
+  isolation: isolate;
+  background: transparent;
+}
+
+
+/* Light theme keeps YUME's violet/sakura identity while switching the page surfaces to light. */
+html[data-theme="light"] {
+  color-scheme: light;
+  --background: oklch(0.985 0.008 300);
+  --foreground: oklch(0.22 0.04 290);
+  --card: oklch(0.995 0.003 300);
+  --card-foreground: oklch(0.22 0.04 290);
+  --popover: oklch(0.995 0.003 300);
+  --popover-foreground: oklch(0.22 0.04 290);
+  --primary: oklch(0.57 0.22 300);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.95 0.02 300);
+  --secondary-foreground: oklch(0.28 0.04 290);
+  --muted: oklch(0.94 0.02 300);
+  --muted-foreground: oklch(0.48 0.04 290);
+  --accent: oklch(0.93 0.04 310);
+  --accent-foreground: oklch(0.23 0.05 290);
+  --border: oklch(0.84 0.025 300);
+  --input: oklch(0.86 0.02 300);
+  --ring: oklch(0.57 0.22 300);
+  --shadow-neon: 0 10px 32px -12px color-mix(in oklab, var(--magenta) 34%, transparent);
+  --body-gradient: radial-gradient(ellipse 82% 34% at 50% 0%, rgba(212, 171, 244, 0.45) 0%, rgba(229, 210, 248, 0.35) 42%, transparent 78%), radial-gradient(ellipse 48% 34% at 100% 17%, rgba(244, 190, 223, 0.30) 0%, transparent 74%), radial-gradient(ellipse 58% 36% at 0% 43%, rgba(213, 196, 246, 0.35) 0%, transparent 76%), linear-gradient(180deg, #fbf6ff 0%, #f7f1ff 46%, #f5f0fc 100%);
+}
+html[data-theme="light"] body { background-color: var(--background); }
+html[data-theme="light"] header {
+  background-color: rgba(250, 246, 255, 0.92) !important;
+  border-color: rgba(74, 46, 94, 0.16) !important;
+  color: #2e1c3d;
+}
+html[data-theme="light"] header nav button { color: #604a70 !important; }
+html[data-theme="light"] header nav button.glass-active { color: #2e1c3d !important; }
+html[data-theme="light"] header button[aria-label="Профиль"], html[data-theme="light"] header button[aria-label="Profile"] {
+  color: #4b315f !important;
+  background-color: rgba(117, 75, 151, 0.10) !important;
+  border-color: rgba(74, 46, 94, 0.24) !important;
+}
+html[data-theme="light"] nav[aria-label="Основная навигация"].glass-liquid, html[data-theme="light"] nav[aria-label="Main navigation"].glass-liquid {
+  background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(247,236,255,0.88) 55%, rgba(255,237,249,0.86)) !important;
+  border-color: rgba(102, 63, 132, 0.24) !important;
+  box-shadow: 0 12px 40px rgba(46, 25, 62, 0.15), 0 0 24px rgba(179,70,255,0.08) !important;
+}
+html[data-theme="light"] nav[aria-label="Основная навигация"] button, html[data-theme="light"] nav[aria-label="Main navigation"] button { color: #604a70 !important; }
+html[data-theme="light"] nav[aria-label="Основная навигация"] button[aria-current="page"], html[data-theme="light"] nav[aria-label="Main navigation"] button[aria-current="page"] { color: #2e1c3d !important; }
+html[data-theme="light"] [class~="bg-[#120C20]"] {
+  background-color: rgba(255, 252, 255, 0.94) !important;
+  color: #2e1c3d !important;
+  border-color: rgba(91, 58, 114, 0.17) !important;
+}
+html[data-theme="light"] [class~="bg-[#171127]/[.98]"] {
+  background-color: rgba(255, 252, 255, 0.98) !important;
+  color: #2e1c3d !important;
+}
+html[data-theme="light"] [class~="bg-[#090714]/95"] { color: #2e1c3d; }
+html[data-theme="light"] [class~="bg-[#090714]/95"] img { filter: none; }
+
+
+/* Light mode adjustments for remaining fixed dark surfaces. */
+html[data-theme="light"] [class~="bg-[#171127]/75"] {
+  background-color: rgba(255, 252, 255, 0.92) !important;
+  border-color: rgba(74, 46, 94, 0.20) !important;
+  color: #2e1c3d;
+}
+html[data-theme="light"] [class~="bg-[#0b0a19]/65"] {
+  background-color: rgba(255, 252, 255, 0.75) !important;
+  color: #2e1c3d !important;
+  border-color: rgba(74, 46, 94, 0.24) !important;
+}
+html[data-theme="light"] [class~="bg-[#0b0a19]/65"] svg { color: #4b315f; }
+html[data-theme="light"] [class~="bg-[#171127]/75"] input { color: #2e1c3d; }
+html[data-theme="light"] [class~="bg-[#171127]/75"] input::placeholder { color: #756680; }
+html[data-theme="light"] [class~="bg-[#080710]"] { color: #f7f0ff; }
+html[data-theme="light"] [class~="bg-[#080710]"] p { color: rgba(255,255,255,0.7); }
+
+
+/* YUME visual refresh: plain monochrome page surfaces, purple active states.
+   Frosted glass remains intentionally limited to search controls. */
+:root {
+  color-scheme: dark;
+  --background: #000000;
+  --foreground: #f7f4fb;
+  --card: #0b0b0d;
+  --card-foreground: #f7f4fb;
+  --popover: #080808;
+  --popover-foreground: #f7f4fb;
+  --secondary: #17141d;
+  --secondary-foreground: #f7f4fb;
+  --muted: #15131a;
+  --muted-foreground: #a5a0ae;
+  --accent: #241633;
+  --accent-foreground: #ffffff;
+  --border: #29252f;
+  --input: #29252f;
+  --ring: #9b5cff;
+  --body-gradient: #000000;
+}
+html[data-theme="light"] {
+  color-scheme: light;
+  --background: #ffffff;
+  --foreground: #241c2c;
+  --card: #ffffff;
+  --card-foreground: #241c2c;
+  --popover: #ffffff;
+  --popover-foreground: #241c2c;
+  --secondary: #f5f2f8;
+  --secondary-foreground: #241c2c;
+  --muted: #f5f2f8;
+  --muted-foreground: #6c6474;
+  --accent: #f0e5ff;
+  --accent-foreground: #3f176e;
+  --border: #e3dce9;
+  --input: #e3dce9;
+  --ring: #7d3cdf;
+  --body-gradient: #ffffff;
+}
+html body {
+  background: var(--background) !important;
+  background-image: none !important;
+}
+html[data-theme="light"] header {
+  background: #ffffff !important;
+  border-color: #e9e3ee !important;
+  color: #241c2c !important;
+  box-shadow: 0 1px 0 rgba(46, 24, 68, 0.05) !important;
+}
+html[data-theme="dark"] header {
+  background: #000000 !important;
+  border-color: #242129 !important;
+}
+
+
+/* Stage 5: keyboard access, responsive overflow and reduced-motion support. */
+html {
+  scroll-padding-top: 5rem;
+}
+
+body {
+  overflow-x: clip;
+}
+
+:where(h1, h2, h3, p) {
+  overflow-wrap: anywhere;
+}
+
+:where(a, button, input, select, textarea, summary, [role="button"], [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 3px;
+}
+
+/* The hero search already indicates focus on its rounded container. Avoid a second rectangular outline around the text input on mobile. */
+[data-filter-anchor] input:focus-visible {
+  outline: none !important;
+  outline-offset: 0 !important;
+  box-shadow: none !important;
+}
+
+.skip-to-content {
+  position: fixed;
+  z-index: 200;
+  top: 0.75rem;
+  left: 0.75rem;
+  max-width: calc(100vw - 1.5rem);
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  background: var(--foreground);
+  color: var(--background);
+  font-weight: 700;
+  box-shadow: 0 4px 24px rgb(0 0 0 / 28%);
+  transform: translateY(calc(-100% - 1rem));
+  transition: transform 160ms ease;
+}
+
+.skip-to-content:focus,
+.skip-to-content:focus-visible {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto !important;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Telegram Mini App viewport support. The existing YUME design tokens stay unchanged. */
+html.telegram-mini-app,
+html.telegram-mini-app body {
+  min-height: var(--yume-tg-viewport-height, 100vh);
+}
+
+
+/* Telegram Mini App touch reliability: decorative poster layers must never
+   become independent hit targets, and interactive controls use native taps. */
+html.telegram-mini-app {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html.telegram-mini-app :where(button, a, [role="button"]) {
+  touch-action: manipulation;
+}
+
+html.telegram-mini-app :where(button, a, [role="button"]) :where(img, svg) {
+  pointer-events: none;
+}
+
+html.telegram-mini-app :where(button, a, [role="button"]) {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* YUME tactile controls: subtle press feedback, with motion-safe fallbacks. */
+.yume-tactile-control {
+  -webkit-tap-highlight-color: transparent;
+  transform-origin: center;
+  transition:
+    transform 120ms ease,
+    filter 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+.yume-tactile-control:active {
+  transform: scale(0.97);
+  filter: brightness(1.04);
+}
+
+.yume-tactile-button:active {
+  transform: scale(0.96);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .yume-tactile-control:hover {
+    filter: brightness(1.035);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .yume-tactile-control {
+    transition: none !important;
+  }
+  .yume-tactile-control:active {
+    transform: none;
+  }
+}
+
+
+
+/* Consistent tactile feedback across every YUME route, not only the home page. */
+:where(button, [role="button"], input[type="button"], input[type="submit"], input[type="reset"]) {
+  -webkit-tap-highlight-color: transparent;
+  transform-origin: center;
+  transition:
+    transform 120ms ease,
+    filter 150ms ease,
+    box-shadow 180ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease;
+}
+
+:where(button, [role="button"], input[type="button"], input[type="submit"], input[type="reset"]):active:not(:disabled) {
+  transform: scale(0.975);
+  filter: brightness(1.06);
+}
+
+:where(button, [role="button"], input[type="button"], input[type="submit"], input[type="reset"]):disabled {
+  cursor: not-allowed;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :where(button, [role="button"], input[type="button"], input[type="submit"], input[type="reset"]):hover:not(:disabled) {
+    filter: brightness(1.035);
+  }
+}
+
+/* Anime posters get a slightly more noticeable press and a restrained hover lift. */
+button.yume-tactile-control:has(.aspect-\\[2\\/3\\]) {
+  transition: transform 150ms ease, filter 150ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(button, [role="button"], input[type="button"], input[type="submit"], input[type="reset"]) {
+    transition: none !important;
+  }
+  :where(button, [role="button"], input[type="button"], input[type="submit"], input[type="reset"]):active:not(:disabled) {
+    transform: none;
+    filter: none;
+  }
+}
