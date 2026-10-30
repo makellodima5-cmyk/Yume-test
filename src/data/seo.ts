@@ -1,4 +1,4 @@
-// Temporary public origin until the permanent domain is selected. Update this before the final SEO release.
+// Staging-only canonical and Open Graph origin for this repository.
 export const SITE_ORIGIN = "https://yume-staging.makellodima5.workers.dev";
 export const SITE_NAME = "YUME";
 export const DEFAULT_META_DESCRIPTION =
