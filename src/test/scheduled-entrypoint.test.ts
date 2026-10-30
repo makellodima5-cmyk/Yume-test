@@ -31,7 +31,7 @@ describe("staging Worker isolation and scheduled maintenance", () => {
     expect(stagingWorkerConfig).toContain('"queue": "yume-staging-tasks"');
     expect(stagingWorkerConfig).toContain('"binding": "YUME_WEB_TASKS"');
     expect(stagingQueueConfig).toContain('"name": "yume-staging-queue-consumer"');
-    expect(stagingQueueConfig).toContain('"queue": "yume-staging-tasks-dlq"');
+    expect(stagingQueueConfig).toContain('"dead_letter_queue": "yume-staging-tasks-dlq"');
     expect(stagingQueueConfig).toContain('"max_concurrency": 1');
     expect(stagingQueueConfig).toContain('"main": "src/queue-worker.ts"');
     expect(queueConsumer).toContain("INSERT OR IGNORE INTO yume_notification_targets");
