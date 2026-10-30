@@ -74,7 +74,7 @@ export const Route = createFileRoute("/anime/$animeId")({
         { property: "og:url", content: canonical },
         ...(image ? [{ property: "og:image", content: image }, { name: "twitter:image", content: image }] : []),
         { name: "twitter:card", content: image ? "summary_large_image" : "summary" },
-        { name: "robots", content: anime ? "index,follow" : "noindex,follow" },
+        { name: "robots", content: "noindex,nofollow" },
       ],
       links: [{ rel: "canonical", href: canonical }],
     };
