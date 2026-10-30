@@ -33,6 +33,7 @@ jobs:
 
             if [ "$home_status" = "200" ] \
               && grep -Fq '<title>YUME — смотри аниме онлайн</title>' /tmp/home.html \
+              && grep -Fq 'name="robots" content="noindex,nofollow"' /tmp/home.html \
               && grep -Fq 'Эпичные сражения' /tmp/home.html; then
               home_ok=true
             fi
