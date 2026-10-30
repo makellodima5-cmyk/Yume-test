@@ -15,7 +15,8 @@
     "test:watch": "vitest",
     "deploy:cloudflare": "bun run build && bunx nitro deploy --prebuilt",
     "cf-typegen": "npx --yes wrangler@4 types",
-    "deploy:staging": "bun run build && bunx wrangler deploy --config wrangler.staging.jsonc"
+    "deploy:staging": "bun run build && bunx wrangler deploy --config wrangler.staging.jsonc",
+    "typecheck": "tsc --noEmit"
   },
   "overrides": {
     "rolldown": "1.2.1"
