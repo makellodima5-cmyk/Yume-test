@@ -1,0 +1,40 @@
+name: Quality checks
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: ESLint rules (exclude existing repository-wide Prettier violations)
+        run: "bunx eslint . --rule 'prettier/prettier: off'"
+
+      - name: Unit tests
+        run: bun run test
+
+      - name: Production build (no deploy)
+        run: bun run build
+
+      - name: TypeScript audit (known baseline errors are non-blocking)
+        run: bun run typecheck
+        continue-on-error: true

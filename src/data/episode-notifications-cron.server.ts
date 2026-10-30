@@ -8,6 +8,13 @@ type AnimeRow = { id:string; title:string; episodes:number; episodes_aired:numbe
 type ShikimoriAnime = { id:string; status?:string|null; episodes?:number|null; episodesAired?:number|null; nextEpisodeAt?:string|null; russian?:string|null; name?:string|null };
 function env():Env { try { return cloudflareEnv as unknown as Env; } catch { const e=(globalThis as typeof globalThis & {__YUME_RUNTIME_ENV__?:unknown}).__YUME_RUNTIME_ENV__; return e&&typeof e==="object"?e as Env:{}; } }
 const API="https://shikimori.io/api/graphql";
+function storedStatus(value: string | null | undefined, fallback: string): string {
+  if (value === "ongoing") return "Онгоинг";
+  if (value === "anons") return "Анонс";
+  if (value === "released") return "Вышел";
+  return fallback;
+}
+
 
 export async function runScheduledEpisodeNotifications(input:unknown):Promise<void>{
  const e=(input&&typeof input==="object"?input:env()) as Env, db=e.YUME_DB as DB|undefined;

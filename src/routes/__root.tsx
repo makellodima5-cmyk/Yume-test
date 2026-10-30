@@ -116,6 +116,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: "YUME — смотри аниме онлайн" },
       { name: "description", content: DEFAULT_META_DESCRIPTION },
+      { name: "robots", content: "noindex,nofollow" },
       { property: "og:site_name", content: SITE_NAME },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

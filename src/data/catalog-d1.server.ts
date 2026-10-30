@@ -558,7 +558,6 @@ export async function getPersistentCatalog(
         .run();
     }
   } catch (error) {
-    schemaReady = false;
     console.error("[YUME] D1 catalog access failed:", error);
     return {
       items: [],

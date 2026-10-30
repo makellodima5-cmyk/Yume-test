@@ -13,21 +13,67 @@ jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
-      - name: Wait for Cloudflare staging deployment and verify HTTP
+      - name: Wait for Cloudflare staging deployment and verify rendered routes
         shell: bash
         run: |
           set -euo pipefail
-          url="https://yume-staging.makellodima5.workers.dev/"
+          base_url="https://yume-staging.makellodima5.workers.dev"
           for attempt in $(seq 1 18); do
-            status=$(curl -sS -L --max-time 15 -o /tmp/response.txt -w '%{http_code}' "$url" || true)
-            echo "Attempt $attempt: HTTP $status"
-            if [ "$status" = "200" ]; then
-              echo "Staging responds successfully."
-              head -c 300 /tmp/response.txt
+            home_status=$(curl -sS -L --max-time 15 -o /tmp/home.html -w '%{http_code}' "$base_url/" || true)
+            detail_status=$(curl -sS -L --max-time 15 -o /tmp/anime.html -w '%{http_code}' "$base_url/anime/1" || true)
+            missing_status=$(curl -sS -L --max-time 15 -o /tmp/missing.html -w '%{http_code}' "$base_url/this-route-should-not-exist" || true)
+            robots_status=$(curl -sS -L --max-time 15 -o /tmp/robots.txt -w '%{http_code}' "$base_url/robots.txt" || true)
+            sitemap_status=$(curl -sS -L --max-time 15 -o /tmp/sitemap.xml -w '%{http_code}' "$base_url/sitemap.xml" || true)
+            favicon_status=$(curl -sS -L --max-time 15 -o /tmp/favicon.svg -w '%{http_code}' "$base_url/favicon.svg" || true)
+
+            home_ok=false
+            detail_ok=false
+            missing_ok=false
+            seo_ok=false
+
+            if [ "$home_status" = "200" ] \
+              && grep -Fq '<title>YUME — смотри аниме онлайн</title>' /tmp/home.html \
+              && grep -Fq 'name="robots" content="noindex,nofollow"' /tmp/home.html \
+              && grep -Fq 'Эпичные сражения' /tmp/home.html; then
+              home_ok=true
+            fi
+
+            if [ "$detail_status" = "200" ] \
+              && grep -Fq 'Ковбой Бибоп' /tmp/anime.html \
+              && grep -Fq 'name="robots" content="noindex,nofollow"' /tmp/anime.html \
+              && ! grep -Fq 'Страница не загрузилась' /tmp/anime.html; then
+              detail_ok=true
+            fi
+
+            if [ "$missing_status" = "404" ] \
+              && grep -Fq 'Страница не найдена' /tmp/missing.html; then
+              missing_ok=true
+            fi
+
+            if [ "$robots_status" = "200" ] \
+              && grep -Fq "Sitemap: $base_url/sitemap.xml" /tmp/robots.txt \
+              && [ "$sitemap_status" = "200" ] \
+              && grep -Fq "<loc>$base_url/</loc>" /tmp/sitemap.xml \
+              && [ "$favicon_status" = "200" ] \
+              && grep -Fq "<svg" /tmp/favicon.svg; then
+              seo_ok=true
+            fi
+
+            echo "Attempt $attempt: home=$home_status($home_ok) anime=$detail_status($detail_ok) not-found=$missing_status($missing_ok) seo=$seo_ok"
+            if [ "$home_ok" = true ] && [ "$detail_ok" = true ] && [ "$missing_ok" = true ] && [ "$seo_ok" = true ]; then
+              echo "Staging rendered-route and SEO smoke tests passed."
               exit 0
             fi
             sleep 10
           done
-          echo "Staging did not return HTTP 200 after 3 minutes."
-          head -c 1200 /tmp/response.txt || true
+
+          echo "Staging rendered-route smoke tests did not pass after 3 minutes."
+          for page in home anime missing; do
+            file="/tmp/$page.html"
+            if [ -f "$file" ]; then
+              echo "--- $page response (first 1200 bytes) ---"
+              head -c 1200 "$file" || true
+              echo
+            fi
+          done
           exit 1

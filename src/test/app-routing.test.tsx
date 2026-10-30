@@ -22,4 +22,12 @@ describe("App routing", () => {
 
     expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
   });
+
+  it("registers the anime detail route and matches a numeric anime ID", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+
+    const matches = router.matchRoutes("/anime/1");
+
+    expect(matches.at(-1)?.routeId).toBe("/anime/$animeId");
+  });
 });
