@@ -49,19 +49,18 @@ describe("anime section classification", () => {
   });
 
   describe("airing section", () => {
-    it("requires confirmed Kodik episode availability; current Shikimori feed determines ongoing status", () => {
+    it("includes only titles whose current Shikimori status is ongoing", () => {
       const base = { ...ANIME[0]!, id: "42" };
-      expect(isEligibleAiringAnime({ ...base, status: "Онгоинг", kodikAvailable: true })).toBe(true);
-      expect(isEligibleAiringAnime({ ...base, status: "Онгоинг", kodikAvailable: false })).toBe(false);
-      expect(isEligibleAiringAnime({ ...base, status: "Онгоинг", kodikAvailable: undefined })).toBe(false);
-      expect(isEligibleAiringAnime({ ...base, status: "Вышел", kodikAvailable: true })).toBe(true);
-      expect(isEligibleAiringAnime({ ...base, status: "Анонс", kodikAvailable: true })).toBe(true);
+      expect(isEligibleAiringAnime({ ...base, status: "Онгоинг" })).toBe(true);
+      expect(isEligibleAiringAnime({ ...base, status: "Вышел" })).toBe(false);
+      expect(isEligibleAiringAnime({ ...base, status: "Анонс" })).toBe(false);
+      expect(isEligibleAiringAnime({ ...base, status: "Неизвестно" })).toBe(false);
     });
 
     it("does not retain a stale D1 ongoing status when the title is absent from the current Shikimori ongoing feed", () => {
-      const stale = { ...ANIME[0]!, id: "42", status: "Онгоинг" as const, kodikAvailable: true };
-      const current = { ...ANIME[1]!, id: "43", status: "Онгоинг" as const, kodikAvailable: true };
-      const released = { ...ANIME[2]!, id: "44", status: "Вышел" as const, kodikAvailable: true };
+      const stale = { ...ANIME[0]!, id: "42", status: "Онгоинг" as const };
+      const current = { ...ANIME[1]!, id: "43", status: "Онгоинг" as const };
+      const released = { ...ANIME[2]!, id: "44", status: "Вышел" as const };
       expect(filterEligibleAiringAnime([stale, current, released], new Set(["43"])))
         .toEqual([current]);
       expect(filterEligibleAiringAnime([stale, current], new Set())).toEqual([]);
