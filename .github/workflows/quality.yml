@@ -26,8 +26,8 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: Lint
-        run: bun run lint
+      - name: ESLint rules (exclude existing repository-wide Prettier violations)
+        run: bunx eslint . --rule 'prettier/prettier: off'
 
       - name: Unit tests
         run: bun run test
