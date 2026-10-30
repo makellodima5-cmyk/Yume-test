@@ -1,0 +1,33 @@
+name: Staging smoke test
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for Cloudflare staging deployment and verify HTTP
+        shell: bash
+        run: |
+          set -euo pipefail
+          url="https://yume-staging.makellodima5.workers.dev/"
+          for attempt in $(seq 1 18); do
+            status=$(curl -sS -L --max-time 15 -o /tmp/response.txt -w '%{http_code}' "$url" || true)
+            echo "Attempt $attempt: HTTP $status"
+            if [ "$status" = "200" ]; then
+              echo "Staging responds successfully."
+              head -c 300 /tmp/response.txt
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Staging did not return HTTP 200 after 3 minutes."
+          head -c 1200 /tmp/response.txt || true
+          exit 1
