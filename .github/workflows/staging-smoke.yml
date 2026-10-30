@@ -40,6 +40,7 @@ jobs:
 
             if [ "$detail_status" = "200" ] \
               && grep -Fq 'Ковбой Бибоп' /tmp/anime.html \
+              && grep -Fq 'name="robots" content="noindex,nofollow"' /tmp/anime.html \
               && ! grep -Fq 'Страница не загрузилась' /tmp/anime.html; then
               detail_ok=true
             fi
