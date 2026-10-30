@@ -10,7 +10,7 @@ function anime(
   airedOn?: string,
   year = 2026,
 ): Pick<Anime, "status" | "airedOn" | "year"> {
-  return { status, airedOn, year };
+  return { status, year, ...(airedOn === undefined ? {} : { airedOn }) };
 }
 
 describe("anime section classification", () => {
