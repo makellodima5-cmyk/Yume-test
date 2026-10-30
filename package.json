@@ -1,6 +1,6 @@
 {
   "name": "tanstack_start_ts",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "private": true,
   "sideEffects": false,
   "type": "module",
@@ -14,7 +14,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "deploy:cloudflare": "bun run build && bunx nitro deploy --prebuilt",
-    "cf-typegen": "npx --yes wrangler@4 types"
+    "cf-typegen": "npx --yes wrangler@4 types",
+    "deploy:staging": "bun run build && bunx wrangler deploy --config wrangler.staging.jsonc"
   },
   "overrides": {
     "rolldown": "1.2.1"
