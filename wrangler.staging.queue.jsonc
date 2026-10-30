@@ -1,0 +1,37 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "yume-staging-queue-consumer",
+  "main": "src/queue-worker.ts",
+  "compatibility_date": "2026-10-20",
+  "compatibility_flags": ["nodejs_compat"],
+  "keep_vars": true,
+  "workers_dev": true,
+  "observability": { "enabled": true },
+  "vars": {
+    "YUME_STAGING_SEED_ENABLED": "true",
+    "YUME_STAGING_CATALOG_TARGET": "300"
+  },
+  "triggers": {
+    "crons": ["*/2 * * * *", "0 3 * * *"]
+  },
+  "d1_databases": [
+    {
+      "binding": "YUME_DB",
+      "database_name": "yume-staging-db",
+      "database_id": "8313e54a-cdca-4aef-8adf-9373b3fa6bbc"
+    }
+  ],
+  "queues": {
+    "consumers": [
+      {
+        "queue": "yume-staging-tasks",
+        "max_batch_size": 2,
+        "max_batch_timeout": 5,
+        "max_concurrency": 1,
+        "max_retries": 5,
+        "retry_delay": 30,
+        "dead_letter_queue": "yume-staging-tasks-dlq"
+      }
+    ]
+  }
+}

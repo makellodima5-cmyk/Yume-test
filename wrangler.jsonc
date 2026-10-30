@@ -1,0 +1,55 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "yume-website",
+  "compatibility_date": "2026-10-20",
+  "compatibility_flags": ["nodejs_compat"],
+  "keep_vars": true,
+  "main": ".output/server/index.mjs",
+  "ratelimits": [
+    {
+      "name": "MEDIA_RATE_LIMITER",
+      "namespace_id": "202610272",
+      "simple": {
+        "limit": 600,
+        "period": 60
+      }
+    },
+    {
+      "name": "CSP_REPORT_RATE_LIMITER",
+      "namespace_id": "202610273",
+      "simple": {
+        "limit": 30,
+        "period": 60
+      }
+    }
+  ],
+  "observability": {
+    "enabled": true
+  },
+  "no_bundle": true,
+  "assets": {
+    "directory": ".output/public",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "rules": [
+    {
+      "type": "ESModule",
+      "globs": ["**/*.mjs", "**/*.js"]
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "YUME_DB",
+      "database_name": "yume_db",
+      "database_id": "29aea579-e316-413f-922b-44c17b12f45a"
+    }
+  ],
+  "queues": { "producers": [ { "binding": "YUME_WEB_TASKS", "queue": "yume-web-tasks" } ] },
+  "kv_namespaces": [
+    {
+      "binding": "YUME_SHIKIMORI_CACHE",
+      "id": "598c5207a7054b3eb45e2efe8214f5d7"
+    }
+  ]
+}

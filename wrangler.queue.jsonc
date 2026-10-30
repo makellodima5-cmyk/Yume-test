@@ -1,0 +1,32 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "yume-web-queue-consumer",
+  "main": "src/queue-worker.ts",
+  "compatibility_date": "2026-10-20",
+  "compatibility_flags": ["nodejs_compat"],
+  "keep_vars": true,
+  "observability": { "enabled": true },
+  "triggers": {
+    "crons": ["0 3 * * *"]
+  },
+  "d1_databases": [
+    {
+      "binding": "YUME_DB",
+      "database_name": "yume_db",
+      "database_id": "29aea579-e316-413f-922b-44c17b12f45a"
+    }
+  ],
+  "queues": {
+    "consumers": [
+      {
+        "queue": "yume-web-tasks",
+        "max_batch_size": 2,
+        "max_batch_timeout": 5,
+        "max_concurrency": 1,
+        "max_retries": 5,
+        "retry_delay": 30,
+        "dead_letter_queue": "yume-web-tasks-dlq"
+      }
+    ]
+  }
+}

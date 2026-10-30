@@ -1,0 +1,49 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "yume-staging",
+  "compatibility_date": "2026-10-20",
+  "compatibility_flags": ["nodejs_compat"],
+  "keep_vars": true,
+  "main": ".output/server/index.mjs",
+  "workers_dev": true,
+  "ratelimits": [
+    {
+      "name": "MEDIA_RATE_LIMITER",
+      "namespace_id": "202610374",
+      "simple": { "limit": 600, "period": 60 }
+    },
+    {
+      "name": "CSP_REPORT_RATE_LIMITER",
+      "namespace_id": "202610375",
+      "simple": { "limit": 30, "period": 60 }
+    }
+  ],
+  "observability": { "enabled": true },
+  "no_bundle": true,
+  "assets": {
+    "directory": ".output/public",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "rules": [
+    { "type": "ESModule", "globs": ["**/*.mjs", "**/*.js"] }
+  ],
+  "d1_databases": [
+    {
+      "binding": "YUME_DB",
+      "database_name": "yume-staging-db",
+      "database_id": "8313e54a-cdca-4aef-8adf-9373b3fa6bbc"
+    }
+  ],
+  "queues": {
+    "producers": [
+      { "binding": "YUME_WEB_TASKS", "queue": "yume-staging-tasks" }
+    ]
+  },
+  "kv_namespaces": [
+    {
+      "binding": "YUME_SHIKIMORI_CACHE",
+      "id": "c7f2252bbf8548f3aedc2ebd2ac1e319"
+    }
+  ]
+}
