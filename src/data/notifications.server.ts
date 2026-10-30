@@ -68,6 +68,21 @@ function sameOrigin(request: Request): boolean {
   return request.headers.get("sec-fetch-site") === "same-origin";
 }
 
+async function readNotificationState(db: Database, userId: string): Promise<{ readIds: string[]; dismissedIds: string[] }> {
+  const [readRows, dismissedRows] = await Promise.all([
+    db.prepare("SELECT notification_id FROM yume_notification_reads WHERE user_id = ?")
+      .bind(userId)
+      .all<{ notification_id: string }>(),
+    db.prepare("SELECT notification_id FROM yume_notification_dismissals WHERE user_id = ?")
+      .bind(userId)
+      .all<{ notification_id: string }>(),
+  ]);
+  return {
+    readIds: readRows.results.map((row) => row.notification_id),
+    dismissedIds: dismissedRows.results.map((row) => row.notification_id),
+  };
+}
+
 async function authenticatedUserId(request: Request, db: Database, env: Environment): Promise<string | null> {
   const token = cookieValue(request, SESSION_COOKIE);
   const secret = typeof env.YUME_AUTH_SESSION_SECRET === "string" && env.YUME_AUTH_SESSION_SECRET.trim().length >= 32
@@ -103,7 +118,7 @@ export async function handleNotifications(request: Request): Promise<Response> {
     if (request.method === "GET") {
       if (!userId) return json({ error: "authentication_required", authenticated: false }, 401);
       const state = await readNotificationState(db, userId);
-      // Schema is initialized once above; avoid repeating DDL for every notification poll.
+      // Static notification read state is stored separately from dynamic notification reads.
       const dynamicRows = await db.prepare("SELECT n.id,n.title,n.body,n.target_url,n.created_at,r.read_at,r.dismissed_at FROM yume_notifications n LEFT JOIN yume_notification_reads_v2 r ON r.notification_id=n.id AND r.user_id=? WHERE n.active=1 AND (NOT EXISTS (SELECT 1 FROM yume_notification_targets t WHERE t.notification_id=n.id) OR EXISTS (SELECT 1 FROM yume_notification_targets t WHERE t.notification_id=n.id AND t.user_id=?)) ORDER BY n.created_at DESC LIMIT 100").bind(userId,userId).all<{id:string;title:string;body:string;target_url:string|null;created_at:string;read_at:string|null;dismissed_at:string|null}>();
       const dynamicNotifications = dynamicRows.results.map(n => ({ id:n.id, publishedAt:n.created_at, title:{ru:n.title,en:n.title}, description:{ru:n.body,en:n.body}, targetUrl:n.target_url, dynamic:true }));
       const dynamicReadIds = dynamicRows.results.filter(n => n.read_at).map(n => n.id);
